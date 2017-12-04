@@ -5,6 +5,9 @@
 
 # User-specific files
 *.suo
+*.sln
+*.DS_Store
+*.csproj
 *.user
 *.userosscache
 *.sln.docstates
