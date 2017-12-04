@@ -1,3 +1,3 @@
-# AoC
+# AoC 2017
 
-Just for store the Advent Of Code days solutions
+Just to store the Advent Of Code days personal solutions
