@@ -23,8 +23,7 @@
             Console.WriteLine("Results Day #" + this.Day);
             Console.WriteLine("Part 1: " + this.Output1);
             Console.WriteLine("Part 2: " + this.Output2);
+            Console.Read();
         }
     }
 }
-
-
