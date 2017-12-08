@@ -11,6 +11,8 @@
         public int Day { get; set; }
         public int Output1 { get; set; }
         public int Output2 { get; set; }
+        public string Output1Str { get; set; }
+        public string Output2Str { get; set; }
 
         public void ReadInput()
         {
@@ -21,8 +23,8 @@
         public void WriteOutput()
         {
             Console.WriteLine("Results Day #" + this.Day);
-            Console.WriteLine("Part 1: " + this.Output1);
-            Console.WriteLine("Part 2: " + this.Output2);
+            Console.WriteLine(string.Format("Part 1: {0}", this.Output1Str != null ? this.Output1Str : this.Output1.ToString()));
+            Console.WriteLine(string.Format("Part 2: {0}", this.Output2Str != null ? this.Output2Str : this.Output2.ToString()));
             Console.Read();
         }
     }

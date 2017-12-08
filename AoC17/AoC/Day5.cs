@@ -1,5 +1,6 @@
 ﻿namespace AoC17
 {
+    using System.Collections.Generic;
     using System.Linq;
 
     internal class Day5 : Master
