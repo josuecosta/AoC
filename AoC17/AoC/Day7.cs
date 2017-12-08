@@ -48,13 +48,10 @@
 
             var allSubTowers = towers.SelectMany(t => t.SubTowers).Select(x => x.Name).Distinct();
             var allTowers = towers.Select(t => t.Name).Distinct();
-            this.Output1Str = allTowers.First(n => !allSubTowers.Contains(n));
+            var root = towers.First(t => t.Name == allTowers.Except(allSubTowers).First());
+            this.Output1Str = root.Name;
 
             // Part 2
-            var root = towers.First(t => t.Name == this.Output1Str);
-
-            //var rootWeigth = root.TowerWeight;
-
             var unbalancedBranch = this.GetUnbalancedBranch(root);
 
             var weights = root.SubTowers.Select(t => t.TowerWeight).Distinct().ToList();
@@ -69,8 +66,10 @@
                 return root;
             }
 
-            var nextRoot = root.SubTowers.GroupBy(t => t.TowerWeight).OrderBy(t => t.Count())
-                               .FirstOrDefault().Select(t => t).Distinct().First();
+            var nextRoot = root.SubTowers.GroupBy(t => t.TowerWeight)
+                               .OrderBy(t => t.Count())
+                               .FirstOrDefault()
+                               .Select(t => t).Distinct().First();
 
             return this.GetUnbalancedBranch(nextRoot);
         }

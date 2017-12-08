@@ -6,7 +6,7 @@
     {
         public static void Main(string[] args)
         {
-            var AoC = new Day7();
+            var AoC = new Day8();
             AoC.Day = int.Parse(AoC.GetType().Name.Substring(3));
             AoC.ReadInput();
             AoC.Run();
