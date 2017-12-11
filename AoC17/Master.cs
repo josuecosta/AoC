@@ -25,7 +25,7 @@
             Console.WriteLine("Results Day #" + this.Day);
             Console.WriteLine(string.Format("Part 1: {0}", this.Output1Str != null ? this.Output1Str : this.Output1.ToString()));
             Console.WriteLine(string.Format("Part 2: {0}", this.Output2Str != null ? this.Output2Str : this.Output2.ToString()));
-            //Console.Read();
+            Console.Read();
         }
     }
 }
