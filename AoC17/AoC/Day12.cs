@@ -16,19 +16,15 @@
                 var key_Program = row.Split(new[] { "<->" }, StringSplitOptions.None).ToList();
                 dic.Add(int.Parse(key_Program[0]), key_Program[1].Split(',').Select(e => int.Parse(e)).ToList());
             }
-
-			// Part 1
+            // Part 1
             this.Output1 = GetNumberOfPrograms(dic[0]);
-
             // Part 2
             this.Output2 = GetTotalNumberOfGroups();
-
         }
 
         private int GetTotalNumberOfGroups()
         {
             var groups = new List<List<int>>();
-
             foreach (var program in dic.Keys)
             {
                 // Check if the program already belogs to a group
@@ -40,14 +36,12 @@
                     programs.Clear();
                 }
             }
-
             return groups.Count();
         }
 
         private int GetNumberOfPrograms(List<int> keys)
         {
             var news = new List<int>();
-
             foreach (var key in keys)
             {
                 if (!programs.Contains(key))
@@ -56,7 +50,6 @@
                     news.AddRange(dic[key]);
                 }
             }
-
             // Recursive: Stops only when there are no more new programs to add to the group.
             return news.Count() == 0 ? programs.Count() : GetNumberOfPrograms(news.Distinct().ToList());
         }
