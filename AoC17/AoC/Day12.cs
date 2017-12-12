@@ -11,32 +11,54 @@
 
         public void Run()
         {
-            // Part 1
             foreach (var row in this.Input)
             {
-                var relations = row.Split(new[] { "<->" }, System.StringSplitOptions.RemoveEmptyEntries).ToList();
-                var key = int.Parse(relations[0]);
-                var programsThatCommunicate = relations[2].Split(',').Select(e => int.Parse(e)).ToList();
-                dic.Add(key, programsThatCommunicate);
-                programs.Add(key);
-
-                this.WhoElseCommunicatesWithYou(programsThatCommunicate);
+                var key_Program = row.Split(new[] { "<->" }, StringSplitOptions.None).ToList();
+                dic.Add(int.Parse(key_Program[0]), key_Program[1].Split(',').Select(e => int.Parse(e)).ToList());
             }
+
+			// Part 1
+            this.Output1 = GetNumberOfPrograms(dic[0]);
 
             // Part 2
-            foreach (var row in this.Input)
-            {
-            }
+            this.Output2 = GetTotalNumberOfGroups();
+
         }
 
-        private void WhoElseCommunicatesWithYou(List<int> programsThatCommunicate)
+        private int GetTotalNumberOfGroups()
         {
-            foreach (var program in programsThatCommunicate)
+            var groups = new List<List<int>>();
+
+            foreach (var program in dic.Keys)
             {
-                if (!dic.ContainsKey(program))
+                // Check if the program already belogs to a group
+                if (!groups.Any(g => g.Contains(program)))
                 {
+                    // This method will also fill the global programs list
+                    this.GetNumberOfPrograms(dic[program]);
+                    groups.Add(programs.Clone());
+                    programs.Clear();
                 }
             }
+
+            return groups.Count();
+        }
+
+        private int GetNumberOfPrograms(List<int> keys)
+        {
+            var news = new List<int>();
+
+            foreach (var key in keys)
+            {
+                if (!programs.Contains(key))
+                {
+                    programs.Add(key);
+                    news.AddRange(dic[key]);
+                }
+            }
+
+            // Recursive: Stops only when there are no more new programs to add to the group.
+            return news.Count() == 0 ? programs.Count() : GetNumberOfPrograms(news.Distinct().ToList());
         }
     }
 }
