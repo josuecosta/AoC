@@ -26,25 +26,29 @@
 
         private int GetNumberOfDelays()
         {
-            var count = 0;
             picoseconds = -1;
-            while (this.IsNotSafeToPassThrough())
+            var count = -1;
+            while (this.IsNotSafeToPassThrough(count))
             {
                 count++;
             }
-            return count;
+            return count + 1;
         }
 
-        private bool IsNotSafeToPassThrough()
+        private bool IsNotSafeToPassThrough(int startPico)
         {
-            for (int i = -1; i <= dic.Keys.Max(); i++)
+            picoseconds = startPico;
+            for (int i = -1; i <= dic.Keys.Max(); i++, picoseconds++)
             {
-                if (this.WillBeCaught(i + 1))
+                if (!dic.ContainsKey(i + 1))
                 {
-                    picoseconds++;
+                    continue;
+                }
+
+                if (this.GetNextSecurityPosition(dic[i + 1]) == 0)
+                {
                     return true;
                 }
-                picoseconds++;
             }
             return false;
         }
