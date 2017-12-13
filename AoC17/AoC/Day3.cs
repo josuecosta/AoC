@@ -1,5 +1,6 @@
 ﻿namespace AoC17
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -14,11 +15,8 @@
                 var x = 0;
                 var y = 0;
                 var steps = 1;
-                var sum = true;
-                var separator = ",";
 
-                var dic = new Dictionary<string, int>();
-                dic.Add("0" + separator + "0", 1);
+                var dic = new Dictionary<string, int> { { "0,0", 1 } };
 
                 for (int i = 2; i <= number;)
                 {
@@ -26,25 +24,24 @@
 
                     while (count < steps)
                     {
-                        x = sum ? x + 1 : x - 1;
-                        dic.Add(x + separator + y, i++);
+                        x = steps % 2 == 0 ? x + 1 : x - 1;
+                        dic.Add(x + "," + y, i++);
                         count++;
                     }
 
                     count = 0;
                     while (count < steps)
                     {
-                        y = sum ? y + 1 : y - 1;
-                        dic.Add(x + separator + y, i++);
+                        y = steps % 2 == 0 ? y + 1 : y - 1;
+                        dic.Add(x + "," + y, i++);
                         count++;
                     }
 
-                    sum = sum == true ? false : true;
                     steps++;
                 }
 
-                var coordinates = dic.Where(p => p.Value == number).First().Key.Split(separator);
-                this.Output1 = int.Parse(coordinates[0]) + int.Parse(coordinates[1]);
+                var coordinates = dic.Where(p => p.Value == number).First().Key.Split(",");
+                this.Output1 = Math.Abs(int.Parse(coordinates[0])) + Math.Abs(int.Parse(coordinates[1]));
             }
 
             // Part 2
@@ -54,11 +51,8 @@
                 var x = 0;
                 var y = 0;
                 var steps = 1;
-                var sum = true;
-                var separator = ",";
 
-                var dic = new Dictionary<string, int>();
-                dic.Add("0" + separator + "0", 1);
+                var dic = new Dictionary<string, int> { { "0,0", 1 } };
 
                 for (int i = 2; i <= number;)
                 {
@@ -66,9 +60,9 @@
 
                     while (count < steps)
                     {
-                        x = sum ? x + 1 : x - 1;
+                        x = steps % 2 == 0 ? x + 1 : x - 1;
                         var res = GetSumNeighbors(x, y, dic);
-                        dic.Add(x + separator + y, res);
+                        dic.Add(x + "," + y, res);
 
                         if (res > number)
                         {
@@ -83,9 +77,9 @@
                     count = 0;
                     while (count < steps)
                     {
-                        y = sum ? y + 1 : y - 1;
+                        y = steps % 2 == 0 ? y + 1 : y - 1;
                         var res = GetSumNeighbors(x, y, dic);
-                        dic.Add(x + separator + y, res);
+                        dic.Add(x + "," + y, res);
 
                         if (res > number)
                         {
@@ -93,11 +87,8 @@
                             this.Output2 = res;
                             break;
                         }
-
                         count++;
                     }
-
-                    sum = sum == true ? false : true;
                     steps++;
                 }
             }
