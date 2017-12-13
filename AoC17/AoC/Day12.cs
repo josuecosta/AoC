@@ -16,6 +16,7 @@
                 var key_Program = row.Split(new[] { "<->" }, StringSplitOptions.None).ToList();
                 dic.Add(int.Parse(key_Program[0]), key_Program[1].Split(',').Select(e => int.Parse(e)).ToList());
             }
+
             // Part 1
             this.Output1 = GetNumberOfPrograms(dic[0]);
             // Part 2
@@ -27,7 +28,7 @@
             var groups = new List<List<int>>();
             foreach (var program in dic.Keys)
             {
-                // Check if the program already belogs to a group
+                // Check if the program already belongs to a group
                 if (!groups.Any(g => g.Contains(program)))
                 {
                     // This method will also fill the global programs list
