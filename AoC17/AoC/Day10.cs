@@ -3,6 +3,10 @@
     using System.Linq;
     using System;
     using System.Collections.Generic;
+
+    using System.Linq;
+    using System;
+
     using System.Text;
 
     internal class Day10 : Master
@@ -10,45 +14,22 @@
         public void Run()
         {
             // Part 1
+            var numbersList = this.GetNumbersList(256);
+            var position = 0;
+            var skipSize = 0;
+            var lengthsList = this.Input.First().Split(',').Select(e => int.Parse(e)).ToList();
+
+            foreach (var length in lengthsList)
             {
-                var numbersList = this.GetNumbersList(256);
-                var position = 0;
-                var skipSize = 0;
-                var lengthsList = this.Input.First().Split(',').Select(e => int.Parse(e)).ToList();
-
-                foreach (var length in lengthsList)
-                {
-                    this.ReverseList(ref numbersList, length, position);
-                    position = (position + length + skipSize) % numbersList.Count;
-                    skipSize++;
-                }
-
-                this.Output1 = numbersList[0] * numbersList[1];
+                this.ReverseList(ref numbersList, length, position);
+                position = (position + length + skipSize) % numbersList.Count;
+                skipSize++;
             }
+
+            this.Output1 = numbersList[0] * numbersList[1];
 
             // Part 2
-            {
-                var numbersList = this.GetNumbersList(256);
-                var position = 0;
-                var skipSize = 0;
-
-                var lengthsList = Encoding.ASCII.GetBytes(this.Input.First()).Select(b => b.ToString()).ToList();
-                lengthsList.AddRange("17,31,73,47,23".Split(',').ToList());
-
-                for (int c = 0; c < 64; c++)
-                {
-                    foreach (var length in lengthsList)
-                    {
-                        this.ReverseList(ref numbersList, int.Parse(length), position);
-                        position = (position + int.Parse(length) + skipSize) % numbersList.Count;
-                        skipSize++;
-                    }
-                }
-
-                var denseHash = GetDenseHash(numbersList);
-
-                this.Output2Str = denseHash;
-            }
+            this.Output2Str = this.GetKnotHash(this.Input.First());
         }
 
         private string GetDenseHash(List<int> numbersList)
@@ -97,6 +78,34 @@
                 list.Add(i);
             }
             return list;
+        }
+
+        public string GetKnotHash(string input)
+        {
+            var numbersList = this.GetNumbersList(256);
+            var position = 0;
+            var skipSize = 0;
+
+            var lengthsList = Encoding.ASCII.GetBytes(input).Select(b => b.ToString()).ToList();
+            lengthsList.AddRange("17,31,73,47,23".Split(',').ToList());
+
+            for (int c = 0; c < 64; c++)
+            {
+                foreach (var length in lengthsList)
+                {
+                    this.ReverseList(ref numbersList, int.Parse(length), position);
+                    position = (position + int.Parse(length) + skipSize) % numbersList.Count;
+                    skipSize++;
+                }
+            }
+
+            return this.GetDenseHash(numbersList);
+        }
+
+        public string GetKnotHashBinary(string hash)
+        {
+            return String.Join(String.Empty, this.GetKnotHash(hash).Select(
+                c => Convert.ToString(Convert.ToInt32(c.ToString(), 16), 2).PadLeft(4, '0')));
         }
     }
 }
