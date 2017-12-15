@@ -3,10 +3,6 @@
     using System.Linq;
     using System;
     using System.Collections.Generic;
-
-    using System.Linq;
-    using System;
-
     using System.Text;
 
     internal class Day10 : Master
@@ -43,7 +39,7 @@
                 {
                     xorResult = xorResult ^ block[j];
                 }
-                denseHash += xorResult.ToString("X");
+                denseHash += xorResult.ToString("X2");
             }
             return denseHash;
         }
