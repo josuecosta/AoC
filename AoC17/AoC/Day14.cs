@@ -7,8 +7,6 @@
 
     internal class Day14 : Master
     {
-        private IDictionary<int, int> dic = new Dictionary<int, int>();
-
         public void Run()
         {
             var input = this.GetHashInputs(this.Input.First());
