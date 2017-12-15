@@ -12,7 +12,6 @@
         public void Run()
         {
             var input = this.GetHashInputs(this.Input.First());
-            //var input = this.GetHashInputs("flqrgnkx");
 
             var knotHashes = new Day10();
             var grid = new List<string>();
@@ -31,26 +30,15 @@
         private int GetNumberOfRegions(List<string> grid)
         {
             var regions = 0;
-            //grid = grid.Select(r => r.Replace('0', '.')).Select(r => r.Replace('1', '0')).ToList();
 
             for (int row = 0; row < 128; row++)
             {
-                var startPosition = 0;
-                for (int col = 0; col < grid.Count; col++, startPosition++)
+                for (int col = 0; col < 128; col++)
                 {
                     if (grid[row][col] == '1')
                     {
+                        this.MarkAdjacent(row, col, grid);
                         regions++;
-                        while (this.HasAdjacent(row, col, grid, out var rowAdj, out var colAdj))
-                        {
-                            var strB = new StringBuilder(grid[row]);
-                            strB[col] = 'X';
-                            grid[row] = strB.ToString();
-
-                            row = rowAdj;
-                            col = colAdj;
-                        }
-                        col = startPosition;
                     }
                 }
             }
@@ -58,34 +46,126 @@
             return regions;
         }
 
-        private bool HasAdjacent(int row, int col, List<string> grid, out int rowAdj, out int colAdj)
+        private void MarkAdjacent(int row, int col, List<string> grid)
         {
-            if (row == 0 && col == 0)
+            var strB = new StringBuilder(grid[row]);
+            strB[col] = 'X';
+            grid[row] = strB.ToString();
+
+            var adjacents = this.GetAdjacent(row, col, grid);
+            foreach (var adjacent in adjacents)
             {
-                if (grid[row][col + 1] == '1')
-                {
-                    rowAdj = row; colAdj = col + 1; return true;
-                }
+                this.MarkAdjacent(adjacent.Item1, adjacent.Item2, grid);
+            }
+        }
+
+        private List<Tuple<int, int>> GetAdjacent(int row, int col, List<string> grid)
+        {
+            var adjacent = new List<Tuple<int, int>>();
+
+            if (row > 0 && row < 127)
+            {
                 if (grid[row + 1][col] == '1')
                 {
-                    rowAdj = row + 1; colAdj = col; return true;
-                }
-            }
-
-            if (row == 127 && col == 127)
-            {
-                if (grid[row][col - 1] == '1')
-                {
-                    rowAdj = row; colAdj = col - 1; return true;
+                    adjacent.Add(new Tuple<int, int>(row + 1, col));
                 }
                 if (grid[row - 1][col] == '1')
                 {
-                    rowAdj = row - 1; colAdj = col; return true;
+                    adjacent.Add(new Tuple<int, int>(row - 1, col));
+                }
+
+                if (col > 0 && col < 127)
+                {
+                    if (grid[row][col + 1] == '1')
+                    {
+                        adjacent.Add(new Tuple<int, int>(row, col + 1));
+                    }
+                    if (grid[row][col - 1] == '1')
+                    {
+                        adjacent.Add(new Tuple<int, int>(row, col - 1));
+                    }
+                }
+                else if (col == 0)
+                {
+                    if (grid[row][col + 1] == '1')
+                    {
+                        adjacent.Add(new Tuple<int, int>(row, col + 1));
+                    }
+                }
+                else // Col == 127
+                {
+                    if (grid[row][col - 1] == '1')
+                    {
+                        adjacent.Add(new Tuple<int, int>(row, col - 1));
+                    }
+                }
+            }
+            else if (row == 0)
+            {
+                if (grid[row + 1][col] == '1')
+                {
+                    adjacent.Add(new Tuple<int, int>(row + 1, col));
+                }
+                if (col > 0 && col < 127)
+                {
+                    if (grid[row][col + 1] == '1')
+                    {
+                        adjacent.Add(new Tuple<int, int>(row, col + 1));
+                    }
+                    if (grid[row][col - 1] == '1')
+                    {
+                        adjacent.Add(new Tuple<int, int>(row, col - 1));
+                    }
+                }
+                else if (col == 0)
+                {
+                    if (grid[row][col + 1] == '1')
+                    {
+                        adjacent.Add(new Tuple<int, int>(row, col + 1));
+                    }
+                }
+                else // Col == 127
+                {
+                    if (grid[row][col - 1] == '1')
+                    {
+                        adjacent.Add(new Tuple<int, int>(row, col - 1));
+                    }
+                }
+            }
+            else // Row == 127
+            {
+                if (grid[row - 1][col] == '1')
+                {
+                    adjacent.Add(new Tuple<int, int>(row - 1, col));
+                }
+                if (col > 0 && col < 127)
+                {
+                    if (grid[row][col + 1] == '1')
+                    {
+                        adjacent.Add(new Tuple<int, int>(row, col + 1));
+                    }
+                    if (grid[row][col - 1] == '1')
+                    {
+                        adjacent.Add(new Tuple<int, int>(row, col - 1));
+                    }
+                }
+                else if (col == 0)
+                {
+                    if (grid[row][col + 1] == '1')
+                    {
+                        adjacent.Add(new Tuple<int, int>(row, col + 1));
+                    }
+                }
+                else // Col == 127
+                {
+                    if (grid[row][col - 1] == '1')
+                    {
+                        adjacent.Add(new Tuple<int, int>(row, col - 1));
+                    }
                 }
             }
 
-            rowAdj = row; colAdj = col;
-            return false;
+            return adjacent;
         }
 
         private List<string> GetHashInputs(string input)
