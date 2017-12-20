@@ -9,10 +9,9 @@
     {
         public void Run()
         {
-            //var steps = int.Parse(this.Input.First());
-            var steps = 3;
+            var steps = int.Parse(this.Input.First());
 
-            var buffer = new List<int> {0};
+            var buffer = new List<int> { 0 };
             var position = 0;
             var counter = 0;
 
@@ -28,25 +27,20 @@
                 buffer.Insert(position, ++counter);
             }
 
-            this.Output1 = buffer[((position+1)%buffer.Count)];
+            this.Output1 = buffer[((position + 1) % buffer.Count)];
 
-            //buffer = new List<int> { 0 };
-            //position = 0;
-            //counter = 0;
-            //for (int i = 0; i < 1000; i++)
-            //{
-            //    position = (steps + position) % buffer.Count;
+            position = 0;
+            for (int i = 1; i <= 50000000; i++)
+            {
+                position = (steps + position) % i;
 
-            //    if (++position == buffer.Count)
-            //    {
-            //        buffer.Add(++counter);
-            //        continue;
-            //    }
-            //    buffer.Insert(position, ++counter);
-            //    Console.WriteLine(string.Join(" ", buffer));
-            //}
+                if (++position == 1)
+                {
+                    counter = i;
+                }
+            }
 
-            this.Output2 = buffer[1];
+            this.Output2 = counter;
         }
     }
 }
