@@ -8,87 +8,73 @@
     public class Day19 : Master
     {
         private StringBuilder letters = new StringBuilder();
+        private long counter = 0;
 
         public void Run()
         {
             this.Walk('v', this.Input);
 
             this.Output1Str = letters.ToString();
-            this.Output2 = 0;
+            this.Output2Str = counter.ToString();
         }
 
         private void Walk(char direction, List<string> input)
         {
             for (int row = 0; row < input.Count;)
             {
-                for (int col = 0; col < input.First().Length;)
+                for (int col = 13; col < input.First().Length;)
                 {
                     var digit = input[row][col];
-                    if (digit == '|')
+                    if (digit == ' ')
                     {
-                        if (direction == 'v')
-                        {
-                            row++;
-                        }
-                        else
-                        {
-                            row--;
-                        }
+                        return;
                     }
-                    else if (digit == '-')
+
+                    counter++;
+                    if (digit == '+')
                     {
-                        if (direction == '>')
-                        {
-                            col++;
-                        }
-                        else
-                        {
-                            col--;
-                        }
+                        (row, col, direction) = this.ChangeDirection(row, col, direction, input); continue;
                     }
-                    else if (digit == '+')
-                    {
-                        (row, col, direction) = this.ChangeDirection(row, col, direction, input);
-                    }
-                    else
+                    else if (digit != '|' && digit != '-')
                     {
                         letters.Append(digit);
-                        (row, col) = this.KeepGoing(row, col, direction, input);
                     }
+
+                    (row, col) = this.KeepGoing(row, col, direction, input);
                 }
             }
         }
 
-        private (int, int, char) ChangeDirection(int row, int col, char prevDirection, List<string> input)
+        private (int, int, char) ChangeDirection(int row, int col, char direction, List<string> input)
         {
-            if (prevDirection == 'v' || prevDirection == '^')
+            if (direction == 'v' || direction == '^')
             {
-                if (input[row][col + 1] == ' ')
+                if (col == input.First().Length - 1 || input[row][col + 1] == ' ')
                 {
                     col--;
-                    prevDirection = '<';
+                    direction = '<';
                 }
                 else
                 {
                     col++;
-                    prevDirection = '>';
+                    direction = '>';
                 }
             }
-            else if (prevDirection == '<' && prevDirection == '>')
+            else // if (direction == '<' && direction == '>')
             {
-                if (input[row + 1][col] == ' ')
+                if (row == input.Count || input[row + 1][col] == ' ')
                 {
                     row--;
-                    prevDirection = '^';
+                    direction = '^';
                 }
                 else
                 {
                     row++;
-                    prevDirection = 'v';
+                    direction = 'v';
                 }
             }
 
-            return (row, col, prevDirection);
+            return (row, col, direction);
         }
 
         private (int, int) KeepGoing(int row, int col, char direction, List<string> input)
