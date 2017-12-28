@@ -14,7 +14,9 @@
         {
             this.Walk('v', this.Input);
 
+            // Part 1
             this.Output1Str = letters.ToString();
+
             this.Output2Str = counter.ToString();
         }
 
@@ -30,7 +32,7 @@
                         return;
                     }
 
-                    counter++;
+                    counter++; // Part 2
                     if (digit == '+')
                     {
                         (row, col, direction) = this.ChangeDirection(row, col, direction, input); continue;
