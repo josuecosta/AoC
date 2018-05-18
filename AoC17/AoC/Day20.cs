@@ -83,13 +83,20 @@
         }
     }
 
-    public class Coordinates
+    public class Coordinate
     {
-        public Coordinates(long[] xyz)
+        public Coordinate(long[] xyz)
         {
             this.X = xyz[0];
             this.Y = xyz[1];
             this.Z = xyz[2];
+        }
+
+        public Coordinate(long x, long y)
+        {
+            this.X = x;
+            this.Y = y;
+            this.Z = 0;
         }
 
         public long X { get; set; }
@@ -97,19 +104,34 @@
         public long Z { get; set; }
 
         public long DistanceToZero { get { return Math.Abs(X) + Math.Abs(Y) + Math.Abs(Z); } }
+
+        public override bool Equals(object coordinate)
+        {
+            if (coordinate == null || this.GetType() != coordinate.GetType())
+                return false;
+
+            var element = coordinate as Coordinate;
+            return element.X == this.X && element.Y == this.Y && element.Z == this.Z;
+        }
+
+        public override int GetHashCode()
+        {
+            var str = X + "," + Y + "," + Z;
+            return str.GetHashCode();
+        }
     }
 
     public class Particle
     {
         public Particle(long[] p, long[] v, long[] a)
         {
-            this.Position = new Coordinates(p);
-            this.Velocity = new Coordinates(v);
-            this.Acceleration = new Coordinates(a);
+            this.Position = new Coordinate(p);
+            this.Velocity = new Coordinate(v);
+            this.Acceleration = new Coordinate(a);
         }
 
-        public Coordinates Velocity { get; set; }
-        public Coordinates Position { get; set; }
-        public Coordinates Acceleration { get; set; }
+        public Coordinate Velocity { get; set; }
+        public Coordinate Position { get; set; }
+        public Coordinate Acceleration { get; set; }
     }
 }
