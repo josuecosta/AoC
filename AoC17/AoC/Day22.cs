@@ -178,9 +178,6 @@
             public VirusII(Direction currentDirection, Coordinate currentPosition)
                 : base(currentDirection, currentPosition)
             {
-                CurrentDirection = currentDirection;
-                CurrentPosition = currentPosition;
-                InfectedNodes = 0;
             }
 
             public override void Move(IDictionary<Coordinate, char> map)
