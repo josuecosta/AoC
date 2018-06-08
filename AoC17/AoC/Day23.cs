@@ -7,95 +7,38 @@
 
     internal class Day23 : Master
     {
-        private IDictionary<string, long> dic = new Dictionary<string, long>();
-
-        private long counter = 0;
-
-        private int currentInstruction = 0;
-
         public void Run()
         {
-            var instructions = this.Input;
+            // Part 1 --> (x-2)^2 ['x' is the first input value]
+            this.Output1 = (int)Math.Pow((double.Parse(this.Input[0].Split(' ').Last()) - 2), 2);
 
-            while (currentInstruction < instructions.Count)
+            int a = 1, b = 57, c = 0, d = 0, e = 0, f = 0, g = 0, h = 0;
+            c = b;
+            if (a != 0)
             {
-                var parameters = instructions[currentInstruction].Split(' ');
-                if (!dic.ContainsKey(parameters[1]) && !int.TryParse(parameters[1], out var temp))
-                {
-                    dic.Add(parameters[1], 0);
-                }
-
-                this.Action(parameters[0], parameters[1], parameters.Count() > 2 ? parameters[2] : null);
-
-                if (parameters[0] == "mul")
-                {
-                    counter++;
-                }
+                b = b * 100 + 100000;
+                c = b + 17000;
             }
-            this.Output1Str = counter.ToString();
-        }
-
-        private void Action(string instruction, string value, string _number = null)
-        {
-            long number = 0;
-            if (_number != null && !long.TryParse(_number, out number))
+            do
             {
-                number = dic[_number];
-            }
-
-            switch (instruction)
-            {
-                case "set":
-                    this.SetsValue(value, number);
-                    currentInstruction++; break;
-
-                case "sub":
-                    this.SubValue(value, number);
-                    currentInstruction++; break;
-
-                case "mul":
-                    this.MulValue(value, number);
-                    currentInstruction++; break;
-
-                case "jnz":
-                    long x = 0;
-                    if (!long.TryParse(value, out x))
+                f = 1;
+                d = 2;
+                e = 2;
+                for (d = 2; d * d <= b; d++)
+                {
+                    if ((b % d == 0))
                     {
-                        x = dic[value];
+                        f = 0;
+                        break;
                     }
-                    this.Jump(x, Int32.Parse(number.ToString()));
-                    break;
+                }
+                if (f == 0)
+                    h++;
+                g = b - c;
+                b += 17;
+            } while (g != 0);
 
-                default:
-                    currentInstruction++; break;
-            }
-        }
-
-        private void Jump(long value, int number)
-        {
-            if (value != 0)
-            {
-                currentInstruction += number;
-            }
-            else
-            {
-                currentInstruction++;
-            }
-        }
-
-        private void MulValue(string value, long number)
-        {
-            dic[value] *= number;
-        }
-
-        private void SubValue(string value, long number)
-        {
-            dic[value] -= number;
-        }
-
-        private void SetsValue(string value, long number)
-        {
-            dic[value] = number;
+            this.Output2 = h;
         }
     }
 }
