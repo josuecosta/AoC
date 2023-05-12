@@ -924,10 +924,26 @@ namespace Aoc21
 
         #endregion DAY 17
 
+
+        #region DAY 18
+
+        public decimal Day18Solve()
+        {
+            var data = File.ReadAllLines(Input);
+
+            var snailfish = new SnailfishHomework(data);
+
+            snailfish.DoHomework();
+
+            return snailfish.GetMagnitude();
+        }
+
+        #endregion DAY 18
+
         public Solutions(bool isTest = false)
         {
             Input = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), isTest ? "input-test.txt" : "input.txt");
-            Solution = Day17Solve2().ToString();
+            Solution = Day18Solve().ToString();
         }
     }
 }
