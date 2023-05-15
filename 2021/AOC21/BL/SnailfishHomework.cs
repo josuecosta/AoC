@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace AOC21.BL
 {
@@ -84,6 +85,30 @@ namespace AOC21.BL
             this.Y = y;
         }
 
+        public override string ToString()
+        {
+            var sb = new StringBuilder("(");
+            if(X.IsNumber)
+            {
+                sb.Append(X.Value);
+            }
+            else
+            {
+                sb.Append(X.ToString());
+            }
+            sb.Append(",");
+            if(Y.IsNumber)
+            {
+                sb.Append(Y.Value);
+            }
+            else
+            {
+                sb.Append(Y.ToString());
+            }
+            sb.Append(")");
+            return sb.ToString();
+        }
+
         private int FoundPairMiddle(string pair)
         {
             var level = -1;
@@ -121,48 +146,50 @@ namespace AOC21.BL
             throw new NotImplementedException();
         }
 
-        private bool Explode(int level)
+        private void Explode(int level)
         {
             // Find
             if (IsNumber)
             {
-                return false;
+                return;
             }
 
             if (level < 4)
             {
                 level++;
-                if(X.Explode(level))
-                {
-                    var x = X.X.X.Value;
-                    var y = X.X.Y.Value;
-                    Parent.X.IsNumber;
-                }
-                if (Y.Explode(level))
-                {
-
-                }
+                X.Explode(level);
+                Y.Explode(level);
             }
             else
             {
                 if (!X.IsNumber)
                 {
-                    //var x = X.X.Value;
-                    //var y = X.Y.Value;
+                    var x = X.X.Value;
+                    var y = X.Y.Value;
                     //ExplodePair(X);
-                    return true;
-                    //UpdateNeighbors(x,y);
+                    var parent = GetFullSnailfish(this).ToString();
+                    var whereAmI = GetIndexOfCurrentSnailfish(parent, x, y);
+                    // UpdateNeighbors(parent);
                 }
                 else if (!Y.IsNumber)
                 {
                     //var x = Y.X.Value;
                     //var y = Y.Y.Value;
                     //ExplodePair(Y);
-                    return true;
+                    
                     //UpdateNeighbors(x,y);
                 }
             }
-            return false;
+        }
+        private int GetIndexOfCurrentSnailfish(string parent, int x, int y)
+        {
+            var pattern = $"\\[{x},{y}\\]";
+
+            return 1;
+        }
+        private Snailfish GetFullSnailfish(Snailfish snailfish)
+        {
+            return snailfish.Parent == null ? snailfish : GetFullSnailfish(snailfish.Parent);
         }
 
         private void UpdateNeighbors(int x, int y)
