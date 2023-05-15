@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Aoc21
 {
     public class Helpers
     {
+        public static Regex RegexNumber = new("\\d+");
+        public static Regex RegexPairOfNumbersInsideBrackets = new("\\[\\d+,\\d+\\]");
         public bool isValidPassword(string item)
         {
             var data = item.Split(' ').Select(x => x.Trim()).ToList();

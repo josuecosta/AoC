@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Aoc21;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace AOC21.BL
 {
@@ -21,10 +22,9 @@ namespace AOC21.BL
         internal void DoHomework()
         {
             homework = snailfishes.First();
-            homework = homework.Reduce();
             for (int i = 1; i < snailfishes.Count; i++)
             {
-                //homework = homework.Add(snailfishes[i]);
+                homework = homework.Add(snailfishes[i]);
                 homework = homework.Reduce();
             }
         }
@@ -87,8 +87,8 @@ namespace AOC21.BL
 
         public override string ToString()
         {
-            var sb = new StringBuilder("(");
-            if(X.IsNumber)
+            var sb = new StringBuilder("[");
+            if (X.IsNumber)
             {
                 sb.Append(X.Value);
             }
@@ -97,7 +97,7 @@ namespace AOC21.BL
                 sb.Append(X.ToString());
             }
             sb.Append(",");
-            if(Y.IsNumber)
+            if (Y.IsNumber)
             {
                 sb.Append(Y.Value);
             }
@@ -105,7 +105,7 @@ namespace AOC21.BL
             {
                 sb.Append(Y.ToString());
             }
-            sb.Append(")");
+            sb.Append("]");
             return sb.ToString();
         }
 
@@ -139,72 +139,127 @@ namespace AOC21.BL
 
         internal Snailfish Reduce()
         {
-            // explode
-            Explode(1);
+            var snailfishAsString = this.ToString();
 
-            // split
-            throw new NotImplementedException();
-        }
-
-        private void Explode(int level)
-        {
-            // Find
-            if (IsNumber)
+            var isSplit = true;
+            while (isSplit)
             {
-                return;
+                // explode
+                snailfishAsString = ExplodeAll(snailfishAsString);
+
+                var numbers = Helpers.RegexNumber.Matches(snailfishAsString);
+                isSplit = numbers.Any(v => int.Parse(v.Value) >= 10) ? true : false;
+
+                if (isSplit)
+                {
+                    snailfishAsString = Split(snailfishAsString);
+                }
             }
 
-            if (level < 4)
+            return new Snailfish(snailfishAsString);
+        }
+
+        private string Split(string snailfish)
+        {
+            var splitNumber = Helpers.RegexNumber.Matches(snailfish)
+                                                 .FirstOrDefault(m => int.Parse(m.Value) >= 10);
+            var newPair = GetPairFromSplit(splitNumber.Value);
+
+            var sb = new StringBuilder(snailfish);
+            sb.Remove(splitNumber.Index, splitNumber.Length);
+            sb.Insert(splitNumber.Index, newPair);
+
+            return sb.ToString();
+        }
+
+        private string GetPairFromSplit(string splitNumber)
+        {
+            var number = int.Parse(splitNumber);
+            var numDivBy2 = number / 2;
+            var x = numDivBy2;
+            var y = number % 2 == 0 ? numDivBy2 : numDivBy2 + 1;
+
+            return $"[{x},{y}]";
+        }
+
+        private string ExplodeAll(string snailfishAsString)
+        {
+            var level = -1;
+            for (int i = 0; i < snailfishAsString.Length; i++)
+            {
+                var c = snailfishAsString[i];
+                level = UpdateLevel(level, c);
+
+                if (level == 4)
+                {
+                    snailfishAsString = Explode(snailfishAsString, i);
+                    i = 0;
+                    level = 0;
+                }
+            }
+            return snailfishAsString;
+        }
+
+        private string Explode(string snailfishAsString, int index)
+        {
+            var sb = new StringBuilder(snailfishAsString);
+            // Get numbers from pair to be removed
+            var numbers = GetNumbersFromSnailfish(snailfishAsString, index);
+            // Remove nested pair » [x,y]
+            sb.Remove(index, snailfishAsString.IndexOf(']', index) - index + 1);
+            // Update with '0' value
+            sb.Insert(index, "0");
+            // Update neighbors with value from removed pair
+            UpdateNeighbors(sb, numbers.x, numbers.y, index);
+            return sb.ToString();
+        }
+
+        private (int x, int y) GetNumbersFromSnailfish(string snailfishAsString, int index)
+        {
+            var matches = Helpers.RegexPairOfNumbersInsideBrackets.Matches(snailfishAsString, index);
+            var snailfish = matches.First().Value;
+            var numbers = Helpers.RegexNumber.Matches(snailfish);
+            return (int.Parse(numbers.First().Value), int.Parse(numbers.Last().Value));
+        }
+
+        private int UpdateLevel(int level, char c)
+        {
+            if (c == '[')
             {
                 level++;
-                X.Explode(level);
-                Y.Explode(level);
             }
-            else
+            else if (c == ']')
             {
-                if (!X.IsNumber)
-                {
-                    var x = X.X.Value;
-                    var y = X.Y.Value;
-                    //ExplodePair(X);
-                    var parent = GetFullSnailfish(this).ToString();
-                    var whereAmI = GetIndexOfCurrentSnailfish(parent, x, y);
-                    // UpdateNeighbors(parent);
-                }
-                else if (!Y.IsNumber)
-                {
-                    //var x = Y.X.Value;
-                    //var y = Y.Y.Value;
-                    //ExplodePair(Y);
-                    
-                    //UpdateNeighbors(x,y);
-                }
+                level--;
             }
-        }
-        private int GetIndexOfCurrentSnailfish(string parent, int x, int y)
-        {
-            var pattern = $"\\[{x},{y}\\]";
 
-            return 1;
-        }
-        private Snailfish GetFullSnailfish(Snailfish snailfish)
-        {
-            return snailfish.Parent == null ? snailfish : GetFullSnailfish(snailfish.Parent);
+            return level;
         }
 
-        private void UpdateNeighbors(int x, int y)
+        private void UpdateNeighbors(StringBuilder snailfish, int x, int y, int startIndex)
         {
-            // convert to strign
-            // update string
-            // convert back to entity
-            throw new NotImplementedException();
+            var leftPart = new StringBuilder(snailfish.ToString().Substring(0, startIndex));
+            var rightPart = new StringBuilder(snailfish.ToString().Substring(startIndex));
+            snailfish.Clear();
+
+            var numbers = Helpers.RegexNumber.Matches(leftPart.ToString());
+            var leftNumber = numbers.LastOrDefault();
+            snailfish.Append(UpdatePairValue(leftPart, leftNumber, x));
+
+            numbers = Helpers.RegexNumber.Matches(rightPart.ToString());
+            var rightNumber = numbers.Skip(1).FirstOrDefault(); // ignore added 0
+            snailfish.Append(UpdatePairValue(rightPart, rightNumber, y));
         }
 
-        private void ExplodePair(Snailfish snailfish)
+        private string UpdatePairValue(StringBuilder sb, Match number, int valueToSum)
         {
-            snailfish.X = null;
-            snailfish.Y = null;
-            snailfish.Value = 0;
+            if (number != null)
+            {
+                var newValue = int.Parse(number.Value) + valueToSum;
+                sb.Remove(number.Index, number.Length);
+                sb.Insert(number.Index, newValue);
+            }
+            return sb.ToString();
         }
     }
 }
