@@ -938,12 +938,21 @@ namespace Aoc21
             return snailfish.GetMagnitude();
         }
 
+        public decimal Day18Solve2()
+        {
+            var data = File.ReadAllLines(Input);
+
+            var snailfish = new SnailfishHomework(data);
+
+            return snailfish.GetLargestMagnitude();
+        }
+
         #endregion DAY 18
 
         public Solutions(bool isTest = false)
         {
             Input = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), isTest ? "input-test.txt" : "input.txt");
-            Solution = Day18Solve().ToString();
+            Solution = Day18Solve2().ToString();
         }
     }
 }

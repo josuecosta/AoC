@@ -9,7 +9,7 @@ namespace Aoc21.Tests
         public void Day_Test()
         {
             var result = new Solutions(true);
-            Assert.AreEqual("4140", result.Solution);
+            Assert.AreEqual("3993", result.Solution);
         }
 
         [Test()]

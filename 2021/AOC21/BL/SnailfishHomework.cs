@@ -8,8 +8,6 @@ namespace AOC21.BL
 {
     public class SnailfishHomework
     {
-        //private string[] data;
-        //private string pairPattern = "\\[[0-9]+,[0-9]+\\]";
         private List<Snailfish> snailfishes;
 
         private Snailfish homework;
@@ -24,14 +22,46 @@ namespace AOC21.BL
             homework = snailfishes.First();
             for (int i = 1; i < snailfishes.Count; i++)
             {
-                homework = homework.Add(snailfishes[i]);
-                homework = homework.Reduce();
+                Addition(snailfishes[i]);
             }
+        }
+
+        private void Addition(Snailfish snailfish)
+        {
+            homework = homework.Add(snailfish);
+            homework = homework.Reduce();
         }
 
         internal decimal GetMagnitude()
         {
             return homework.Magnitude;
+        }
+
+        internal decimal GetLargestMagnitude()
+        {
+            var bestMagnitude = 0;
+
+            for (int line = 0; line < snailfishes.Count; line++)
+            {
+                for (int i = 0; i < snailfishes.Count; i++)
+                {
+                    homework = snailfishes[line];
+
+                    if (line == i)
+                    {
+                        continue;
+                    }
+
+                    Addition(snailfishes[i]);
+
+                    var magnitude = homework.Magnitude;
+                    if (magnitude > bestMagnitude)
+                    {
+                        bestMagnitude = magnitude;
+                    }
+                }
+            }
+            return bestMagnitude;
         }
     }
 
@@ -56,8 +86,6 @@ namespace AOC21.BL
             }
         }
 
-        public Snailfish Parent { get; set; }
-
         public Snailfish(string snailfish)
         {
             var commaIndex = FoundPairMiddle(snailfish);
@@ -67,11 +95,9 @@ namespace AOC21.BL
 
             var isNumber = int.TryParse(left, out var number);
             this.X = isNumber ? new Snailfish(number) : new Snailfish(left);
-            this.X.Parent = this;
 
             isNumber = int.TryParse(right, out number);
             this.Y = isNumber ? new Snailfish(number) : new Snailfish(right);
-            this.Y.Parent = this;
         }
 
         public Snailfish(int number)
@@ -85,101 +111,27 @@ namespace AOC21.BL
             this.Y = y;
         }
 
-        public override string ToString()
-        {
-            var sb = new StringBuilder("[");
-            if (X.IsNumber)
-            {
-                sb.Append(X.Value);
-            }
-            else
-            {
-                sb.Append(X.ToString());
-            }
-            sb.Append(",");
-            if (Y.IsNumber)
-            {
-                sb.Append(Y.Value);
-            }
-            else
-            {
-                sb.Append(Y.ToString());
-            }
-            sb.Append("]");
-            return sb.ToString();
-        }
-
-        private int FoundPairMiddle(string pair)
-        {
-            var level = -1;
-            for (int i = 0; i < pair.Length; i++)
-            {
-                var c = pair[i];
-                if (c == ',' && level == 0)
-                {
-                    return i;
-                }
-                else if (c == '[')
-                {
-                    level++;
-                }
-                else if (c == ']')
-                {
-                    level--;
-                }
-            }
-            return 0;
-        }
-
-        internal Snailfish Add(Snailfish newSnailfish)
-        {
-            var addedSnailfish = new Snailfish(this, newSnailfish);
-            return addedSnailfish;
-        }
+        internal Snailfish Add(Snailfish newSnailfish) => new Snailfish(this, newSnailfish);
 
         internal Snailfish Reduce()
         {
-            var snailfishAsString = this.ToString();
+            var snailfish = this.ToString();
 
             var isSplit = true;
             while (isSplit)
             {
-                // explode
-                snailfishAsString = ExplodeAll(snailfishAsString);
+                snailfish = ExplodeAll(snailfish);
 
-                var numbers = Helpers.RegexNumber.Matches(snailfishAsString);
+                var numbers = Helpers.RegexNumber.Matches(snailfish);
                 isSplit = numbers.Any(v => int.Parse(v.Value) >= 10) ? true : false;
 
                 if (isSplit)
                 {
-                    snailfishAsString = Split(snailfishAsString);
+                    snailfish = Split(snailfish);
                 }
             }
 
-            return new Snailfish(snailfishAsString);
-        }
-
-        private string Split(string snailfish)
-        {
-            var splitNumber = Helpers.RegexNumber.Matches(snailfish)
-                                                 .FirstOrDefault(m => int.Parse(m.Value) >= 10);
-            var newPair = GetPairFromSplit(splitNumber.Value);
-
-            var sb = new StringBuilder(snailfish);
-            sb.Remove(splitNumber.Index, splitNumber.Length);
-            sb.Insert(splitNumber.Index, newPair);
-
-            return sb.ToString();
-        }
-
-        private string GetPairFromSplit(string splitNumber)
-        {
-            var number = int.Parse(splitNumber);
-            var numDivBy2 = number / 2;
-            var x = numDivBy2;
-            var y = number % 2 == 0 ? numDivBy2 : numDivBy2 + 1;
-
-            return $"[{x},{y}]";
+            return new Snailfish(snailfish);
         }
 
         private string ExplodeAll(string snailfishAsString)
@@ -214,7 +166,35 @@ namespace AOC21.BL
             return sb.ToString();
         }
 
-        private (int x, int y) GetNumbersFromSnailfish(string snailfishAsString, int index)
+        private static string Split(string snailfish)
+        {
+            var splitNumber = Helpers.RegexNumber.Matches(snailfish)
+                                                 .FirstOrDefault(m => int.Parse(m.Value) >= 10);
+            var newPair = GetPairFromSplit(splitNumber.Value);
+
+            var sb = new StringBuilder(snailfish);
+            sb.Remove(splitNumber.Index, splitNumber.Length);
+            sb.Insert(splitNumber.Index, newPair);
+
+            return sb.ToString();
+        }
+
+        private static int FoundPairMiddle(string pair)
+        {
+            var level = -1;
+            for (int i = 0; i < pair.Length; i++)
+            {
+                var c = pair[i];
+                if (c == ',' && level == 0)
+                {
+                    return i;
+                }
+                level = UpdateLevel(level, c);
+            }
+            return 0;
+        }
+
+        private static (int x, int y) GetNumbersFromSnailfish(string snailfishAsString, int index)
         {
             var matches = Helpers.RegexPairOfNumbersInsideBrackets.Matches(snailfishAsString, index);
             var snailfish = matches.First().Value;
@@ -222,19 +202,19 @@ namespace AOC21.BL
             return (int.Parse(numbers.First().Value), int.Parse(numbers.Last().Value));
         }
 
-        private int UpdateLevel(int level, char c)
+        private static string GetPairFromSplit(string splitNumber)
         {
-            if (c == '[')
-            {
-                level++;
-            }
-            else if (c == ']')
-            {
-                level--;
-            }
-
-            return level;
+            var number = int.Parse(splitNumber);
+            var numDivBy2 = number / 2;
+            var x = numDivBy2;
+            var y = number % 2 == 0 ? numDivBy2 : numDivBy2 + 1;
+            return $"[{x},{y}]";
         }
+
+        private static int UpdateLevel(int level, char c)
+            => c == '[' ? level + 1
+             : c == ']' ? level - 1
+             : level;
 
         private void UpdateNeighbors(StringBuilder snailfish, int x, int y, int startIndex)
         {
@@ -251,7 +231,7 @@ namespace AOC21.BL
             snailfish.Append(UpdatePairValue(rightPart, rightNumber, y));
         }
 
-        private string UpdatePairValue(StringBuilder sb, Match number, int valueToSum)
+        private static string UpdatePairValue(StringBuilder sb, Match number, int valueToSum)
         {
             if (number != null)
             {
@@ -259,6 +239,16 @@ namespace AOC21.BL
                 sb.Remove(number.Index, number.Length);
                 sb.Insert(number.Index, newValue);
             }
+            return sb.ToString();
+        }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder("[");
+            sb.Append(X.IsNumber ? X.Value : X.ToString());
+            sb.Append(',');
+            sb.Append(Y.IsNumber ? Y.Value : Y.ToString());
+            sb.Append(']');
             return sb.ToString();
         }
     }
