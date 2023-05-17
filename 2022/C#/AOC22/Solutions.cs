@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Aoc22.BL;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -153,10 +154,25 @@ namespace Aoc22
 
         #endregion DAY 5
 
+        // Day 6 ~ 11 made in Java
+
+        #region DAY 12
+
+        public decimal Day12Solve()
+        {
+            var data = File.ReadAllLines(Input);
+
+            var hill = new HillClimbingAlgorithm(data);
+
+            return hill.GetSteps();
+        }
+
+        #endregion DAY 12
+
         public Solutions(bool isTest = false)
         {
             Input = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), isTest ? "input-test.txt" : "input.txt");
-            Solution = Day5Solve().ToString();
+            Solution = Day12Solve().ToString();
         }
     }
 }
