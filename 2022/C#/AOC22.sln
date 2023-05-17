@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31729.503
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AOC22", "AOC22\AOC22.csproj", "{59474F00-5451-4245-ABB0-D2980ABEFF9E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AOC22Tests", "AOC22Tests\AOC22Tests.csproj", "{8D8B36C1-F684-44CE-93AB-0B553C5060E8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{59474F00-5451-4245-ABB0-D2980ABEFF9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59474F00-5451-4245-ABB0-D2980ABEFF9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59474F00-5451-4245-ABB0-D2980ABEFF9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59474F00-5451-4245-ABB0-D2980ABEFF9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D8B36C1-F684-44CE-93AB-0B553C5060E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D8B36C1-F684-44CE-93AB-0B553C5060E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D8B36C1-F684-44CE-93AB-0B553C5060E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D8B36C1-F684-44CE-93AB-0B553C5060E8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DB753691-2322-42F8-8E56-ECCDF1FDC1BC}
+	EndGlobalSection
+EndGlobal
