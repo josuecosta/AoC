@@ -169,10 +169,23 @@ namespace Aoc22
 
         #endregion DAY 12
 
+        #region DAY 13
+
+        public decimal Day13Solve()
+        {
+            var data = File.ReadAllLines(Input);
+
+            var distressSignal = new DistressSignal(data);
+
+           return distressSignal.GetSumOfPacketsInOrder();
+        }
+
+        #endregion DAY 13
+
         public Solutions(bool isTest = false)
         {
             Input = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), isTest ? "input-test.txt" : "input.txt");
-            Solution = Day12Solve().ToString();
+            Solution = Day13Solve().ToString();
         }
     }
 }

@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BL\DistressSignal.cs" />
     <Compile Include="BL\HillClimbingAlgorithm.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="Program.cs" />

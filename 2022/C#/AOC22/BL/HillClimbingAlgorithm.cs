@@ -67,19 +67,60 @@ namespace Aoc22.BL
 
         internal decimal GetSteps()
         {
-            // var neighbours = GetNeighbours(// start one);
-            throw new NotImplementedException();
+            var start = this.Map.Values.Single(e => e.High == (char)EPositions.S);
+            var end = this.Map.Values.Single(e => e.High == (char)EPositions.E);
+            start.Position.IsMarked = true;
+
+            return CalcDistance(start, end, 0);
         }
 
-        private IEnumerable<Coordinates> GetNeighbours(Elevation elevation)
+        private int CalcDistance(Elevation start, Elevation end, int count)
         {
-            var x = elevation.Position.X;
-            var y = elevation.Position.Y;
+            if (start == end)
+            {
+                return count;
+            }
 
-            return Map.Keys.ToArray().Where(k =>
-                (k.X == x || k.X == x + 1 || k.X == x - 1)
-             && (k.Y == y || k.Y == y + 1 || k.Y == y - 1)
-             && (!k.IsMarked));
+            var neighbours = GetNeighbours(start);
+
+            var possibleNextSteps = GetNextSteps(start.Value, neighbours);
+
+            possibleNextSteps = FilterMore(possibleNextSteps, start.Value);
+
+            var minDistance = int.MaxValue;
+            foreach (var nextStep in possibleNextSteps)
+            {
+                nextStep.Position.IsMarked = true;
+                var tempDist = CalcDistance(nextStep, end, count+1);
+                nextStep.Position.IsMarked = false;
+                if (tempDist < minDistance)
+                {
+                    minDistance = tempDist;
+                }
+            }
+            return minDistance;
+        }
+
+        private IEnumerable<Elevation> FilterMore(IEnumerable<Elevation> possibleNextSteps, int value)
+        {
+            var best = possibleNextSteps.Where(e => e.Value != value);
+            return !best.Any() ? possibleNextSteps : best;
+        }
+
+        private static IEnumerable<Elevation> GetNextSteps(int value, IEnumerable<Elevation> neighbours)
+            => neighbours.Where(e => value <= e.Value && e.Value <= value + 1 
+                                 && !e.Position.IsMarked);
+
+        private IEnumerable<Elevation> GetNeighbours(Elevation elevation)
+        {
+            var eX = elevation.Position.X;
+            var eY = elevation.Position.Y;
+
+            var keys = Map.Keys.Where(k =>
+                (k.X == eX && (k.Y == eY + 1 || k.Y == eY - 1))
+             || (k.Y == eY && (k.X == eX + 1 || k.X == eX - 1)));
+
+            return Map.Where(k => keys.Contains(k.Key)).Select(k => k.Value);
         }
     }
 }
