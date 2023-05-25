@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -6,7 +7,7 @@ namespace Aoc22.BL
 {
     internal class DistressSignal
     {
-        private List<Packet> _packets;
+        private List<PacketPair> _packets;
         private Dictionary<int, bool> _packetMap;
 
         public DistressSignal(string[] data)
@@ -19,88 +20,65 @@ namespace Aoc22.BL
             }
         }
 
-        private List<Packet> InitPackets(string[] data)
+        private List<PacketPair> InitPackets(string[] data)
         {
-            var list = new List<Packet>();
+            var list = new List<PacketPair>();
             for (int i = 0; i < data.Length - 1; i += 3)
             {
                 var l = i;
                 var r = i + 1;
-                list.Add(new Packet(data[l], data[r]));
+                list.Add(new PacketPair(data[l], data[r]));
             }
             return list;
         }
 
         internal decimal GetSumOfPacketsInOrder() => _packetMap.Where(k => k.Value).Sum(k => k.Key);
 
-        private class Packet
+        internal decimal GetDecoderKey()
         {
-            public Packet(string left, string right)
-            {
-                var lTemp = int.TryParse(left, out var lValue) ? $"[{lValue}]" : left;
-                var rTemp = int.TryParse(right, out var rValue) ? $"[{rValue}]" : right;
+            var packets = new List<Packet>();
 
-                this.L = lTemp;
-                this.R = rTemp;
+            var twoPacket = new Packet("[[2]]");
+            var sixPacket = new Packet("[[6]]");
+
+            foreach (var pair in _packets)
+            {
+                packets.Add(pair.L);
+                packets.Add(pair.R);
             }
 
-            public string L { get; set; }
-            public string R { get; set; }
-            public bool IsRightOrder => IsCorrectOrder() != 0;
+            // Adding divider packets
+            packets.Add(twoPacket);
+            packets.Add(sixPacket);
 
-            private int IsCorrectOrder()
+            // Uses the CompareTo overrided method
+            packets.Sort();
+
+            return (packets.IndexOf(twoPacket) + 1) * (packets.IndexOf(sixPacket) + 1);
+        }
+
+        private class PacketPair
+        {
+            public PacketPair(string left, string right)
             {
-                var LElements = GetPairs(L);
-                var RElements = GetPairs(R);
-
-                if (!LElements.Any() && RElements.Any())
-                {
-                    return 1;
-                }
-
-                for (int i = 0; i < LElements.Count; i++)
-                {
-                    if (i == RElements.Count) // R side doesn't have more elements
-                    {
-                        return 0;
-                    }
-
-                    // both values are integers
-                    var lIsInt = int.TryParse(LElements[i], out var lValue);
-                    var rIsInt = int.TryParse(RElements[i], out var rValue);
-
-                    if (lIsInt && rIsInt)
-                    {
-                        if (lValue == rValue)
-                        {
-                            continue;
-                        }
-                        return lValue < rValue ? 1 : 0;
-                    }
-                    else
-                    {
-                        // both values are lists
-                        // exactly one value is an integer
-                        var nestedComparison = new Packet(LElements[i], RElements[i]).IsCorrectOrder();
-                        switch (nestedComparison)
-                        {
-                            case 0:
-                                return 0;
-
-                            case 1:
-                                return 1;
-                        }
-                        // case -1, continue the comparison
-                    }
-                }
-
-                if (LElements.Count < RElements.Count)
-                {
-                    return 1;
-                }
-
-                return -1; // inclonclusive
+                this.L = new Packet(left);
+                this.R = new Packet(right);
             }
+
+            public Packet L { get; set; }
+            public Packet R { get; set; }
+            public bool IsRightOrder => L.CompareTo(R) != 1;
+        }
+
+        private class Packet : IComparable<Packet>
+        {
+            public Packet(string signal)
+            {
+                var tempSignal = int.TryParse(signal, out var tempValue) ? $"[{tempValue}]" : signal;
+                this.Signal = tempSignal;
+            }
+
+            public string Signal { get; set; }
 
             private List<string> GetPairs(string packet)
             {
@@ -132,6 +110,69 @@ namespace Aoc22.BL
                 => c == '[' ? level + 1
                  : c == ']' ? level - 1
                  : level;
+
+            /*
+             * IComparable.CompareTo(Object) Method
+             *  <0   This instance precedes obj in the sort order.
+             *  0    This instance occurs in the same position in the sort order as obj.
+             *  >0   This instance follows obj in the sort order.
+             */
+
+            public int CompareTo(Packet other)
+            {
+                var LElements = GetPairs(this.Signal);
+                var RElements = GetPairs(other.Signal);
+
+                // Left packet run out of elements first
+                if (!LElements.Any() && RElements.Any())
+                {
+                    return -1;
+                }
+
+                for (int i = 0; i < LElements.Count; i++)
+                {
+                    if (i == RElements.Count) // Right packet run out of elements
+                    {
+                        return 1;
+                    }
+
+                    // both values are integers
+                    var lIsInt = int.TryParse(LElements[i], out var lValue);
+                    var rIsInt = int.TryParse(RElements[i], out var rValue);
+
+                    if (lIsInt && rIsInt)
+                    {
+                        if (lValue == rValue)
+                        {
+                            continue;
+                        }
+                        return lValue < rValue ? -1 : 1;
+                    }
+                    else
+                    {
+                        // both values are lists
+                        // exactly one value is an integer
+                        var nestedComparison = new Packet(LElements[i]).CompareTo(new Packet(RElements[i]));
+                        switch (nestedComparison)
+                        {
+                            case -1:
+                                return -1;
+
+                            case 1:
+                                return 1;
+                        }
+                        // case 0, continue the comparison
+                    }
+                }
+
+                // After all the compares, Left packet has less elements
+                if (LElements.Count < RElements.Count)
+                {
+                    return -1;
+                }
+
+                return 0; // equals
+            }
         }
     }
 }
