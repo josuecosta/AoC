@@ -191,10 +191,32 @@ namespace Aoc22
 
         #endregion DAY 13
 
+        #region DAY 14
+
+        public decimal Day14Solve()
+        {
+            var data = File.ReadAllLines(Input);
+
+            var regolithReservoir = new RegolithReservoir(data);
+
+            return regolithReservoir.GetUnitsOfSandAtRest();
+        }
+
+        public decimal Day14Solve2()
+        {
+            var data = File.ReadAllLines(Input);
+
+            var regolithReservoir = new RegolithReservoir(data);
+
+            return regolithReservoir.GetUnitsOfSandToBlockSource();
+        }
+
+        #endregion DAY 14
+
         public Solutions(bool isTest = false)
         {
             Input = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), isTest ? "input-test.txt" : "input.txt");
-            Solution = Day13Solve2().ToString();
+            Solution = Day14Solve2().ToString();
         }
     }
 }

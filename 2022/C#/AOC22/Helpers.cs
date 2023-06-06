@@ -68,6 +68,13 @@ namespace Aoc22
             Y = y;
         }
 
+        public Coordinates(int x, int y, bool isMarked)
+        {
+            X = x;
+            Y = y;
+            IsMarked = isMarked;
+        }
+
         public int X { get; set; }
         public int Y { get; set; }
         public bool IsMarked { get; set; }

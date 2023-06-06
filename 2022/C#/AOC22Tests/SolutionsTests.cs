@@ -9,7 +9,7 @@ namespace Aoc22.Tests
         public void Day_Test()
         {
             var result = new Solutions(true);
-            Assert.AreEqual("140", result.Solution);
+            Assert.AreEqual("93", result.Solution);
         }
 
         [Test()]
@@ -18,6 +18,5 @@ namespace Aoc22.Tests
             var result = new Solutions();
             System.Console.WriteLine(result.Solution);
         }
-
     }
 }
