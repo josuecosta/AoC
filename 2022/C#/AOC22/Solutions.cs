@@ -224,12 +224,21 @@ namespace Aoc22
             return beaconExclusionZone.GetPositionsWithoutBeacons(10);
         }
 
+        public decimal Day15Solve2()
+        {
+            var data = File.ReadAllLines(Input);
+
+            var beaconExclusionZone = new BeaconExclusionZone(data);
+
+            return beaconExclusionZone.GetTuningFrequency(4000000);
+        }
+
         #endregion DAY 15
 
         public Solutions(bool isTest = false)
         {
             Input = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), isTest ? "input-test.txt" : "input.txt");
-            Solution = Day15Solve().ToString();
+            Solution = Day15Solve2().ToString();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MoreLinq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -34,10 +35,11 @@ namespace Aoc22.BL
             return map;
         }
 
+        #region Part 1
+
         internal decimal GetPositionsWithoutBeacons(int row)
         {
             CalculateSafeArea(row);
-            Print();
             return map
                 .Where(c =>
                             c.Y == row
@@ -45,26 +47,6 @@ namespace Aoc22.BL
                          && c.IsSafe.Value
                          && !c.IsBeacon)
                 .Count();
-        }
-
-        private void Print()
-        {
-            for (int row = -2; row <= 22; row++)
-            {
-                for (int col = -2; col <= 25; col++)
-                {
-                    var spot = map.FirstOrDefault(m => m.X == col && m.Y == row);
-                    if (spot != null)
-                    {
-                        Console.Write(spot.IsScanner ? "S" : spot.IsBeacon ? "B" : "#");
-                    }
-                    else
-                    {
-                        Console.Write(".");
-                    }
-                }
-                Console.WriteLine();
-            }
         }
 
         private void CalculateSafeArea(int row)
@@ -93,6 +75,72 @@ namespace Aoc22.BL
                 }
             }
         }
+
+        #endregion Part 1
+
+        #region Part 2
+
+        internal decimal GetTuningFrequency(int max)
+        {
+            CalculateSafeAreaExtended(max);
+            //Print();
+            decimal x = map.GroupBy(m => m.X).Where(m => m.Key >= 0 && m.Key <= max).GroupBy(c => c.Count()).OrderBy(_ => _.Key).First().First().Key;
+
+            decimal y = map.GroupBy(m => m.Y).Where(m => m.Key >= 0 && m.Key <= max).GroupBy(c => c.Count()).OrderBy(_ => _.Key).First().First().Key;
+
+            return (x * 4000000M) + y;
+        }
+
+        private void CalculateSafeAreaExtended(int max)
+        {
+            map.Where(c => c.IsScanner).ToList()
+               .ForEach(s => CreateSafeAreaExtended(s.X, s.Y, (int)s.Distance, max));
+        }
+        private void CreateSafeAreaExtended(int x, int y, int distance, int max)
+        {
+            var originalPosition = new Coordinates(x, y);
+
+            var yStart = y - distance <= 0 ? 0 : y - distance;
+            var yEnd   = y + distance >= max ? max : y + distance;
+            for (int row = yStart; row <= yEnd; row++)
+            {
+                var xStart = x - distance <= 0 ? 0 : x - distance;
+                var xEnd   = x + distance >= max ? max : x + distance;
+                for (int col = xStart; col <= xEnd; col++)
+                {
+                    var coordinate = new Coordinates(col, row);
+                    if (!map.Contains(coordinate))
+                    {
+                        if (Helpers.CalcManhattanDistance(originalPosition, coordinate) <= distance)
+                        {
+                            map.Add(new CoordinatesSB(coordinate.X, coordinate.Y));
+                        }
+                    }
+                }
+            }
+        }
+
+        private void Print()
+        {
+            for (int row = 0; row <= 20; row++)
+            {
+                for (int col = 0; col <= 20; col++)
+                {
+                    var spot = map.FirstOrDefault(m => m.X == col && m.Y == row);
+                    if (spot != null)
+                    {
+                        Console.Write(spot.IsScanner ? "S" : spot.IsBeacon ? "B" : "#");
+                    }
+                    else
+                    {
+                        Console.Write(".");
+                    }
+                }
+                Console.WriteLine();
+            }
+        }
+
+        #endregion Part 2
 
         private class CoordinatesSB : Coordinates
         {
