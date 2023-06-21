@@ -177,7 +177,7 @@ namespace Aoc22
 
             var distressSignal = new DistressSignal(data);
 
-           return distressSignal.GetSumOfPacketsInOrder();
+            return distressSignal.GetSumOfPacketsInOrder();
         }
 
         public decimal Day13Solve2()
@@ -213,10 +213,23 @@ namespace Aoc22
 
         #endregion DAY 14
 
+        #region DAY 15
+
+        public decimal Day15Solve()
+        {
+            var data = File.ReadAllLines(Input);
+
+            var beaconExclusionZone = new BeaconExclusionZone(data);
+
+            return beaconExclusionZone.GetPositionsWithoutBeacons(10);
+        }
+
+        #endregion DAY 15
+
         public Solutions(bool isTest = false)
         {
             Input = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), isTest ? "input-test.txt" : "input.txt");
-            Solution = Day14Solve2().ToString();
+            Solution = Day15Solve().ToString();
         }
     }
 }

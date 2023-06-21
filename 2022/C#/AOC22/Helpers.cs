@@ -1,4 +1,5 @@
 ﻿using MoreLinq;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace Aoc22
     public class Helpers
     {
         public static Regex RegexPairInsideBrackets = new Regex("\\[[0-9,\\[\\]]*\\]");
+        public static Regex RegexNumbers = new Regex("[0-9-]+");
 
         public bool isValidPassword(string item)
         {
@@ -51,7 +53,14 @@ namespace Aoc22
             var requiredKeys = new string[] { "byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid" };
 
             return requiredKeys.All(x => passport.ContainsKey(x));
+            
         }
+
+        public static decimal CalcManhattanDistance(Coordinates c1, Coordinates c2)
+            => Math.Abs(c1.X - c2.X) + Math.Abs(c1.Y - c2.Y);
+
+        public static decimal CalcManhattanDistance(int x1, int y1, int x2, int y2)
+            => CalcManhattanDistance(new Coordinates(x1, y1), new Coordinates(x2, y2));
     }
 
     public class Coordinates

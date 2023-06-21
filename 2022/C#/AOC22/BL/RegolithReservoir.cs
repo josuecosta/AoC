@@ -6,12 +6,6 @@ namespace Aoc22.BL
 {
     internal class RegolithReservoir
     {
-        private enum EMaterials
-        {
-            Rock = '#',
-            Air = '.'
-        }
-
         private HashSet<Coordinates> cave;
         private Coordinates startPoint = new Coordinates(500, 0);
         private int floorPoint;

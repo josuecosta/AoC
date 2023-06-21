@@ -9,7 +9,7 @@ namespace Aoc22.Tests
         public void Day_Test()
         {
             var result = new Solutions(true);
-            Assert.AreEqual("93", result.Solution);
+            Assert.AreEqual("26", result.Solution);
         }
 
         [Test()]
