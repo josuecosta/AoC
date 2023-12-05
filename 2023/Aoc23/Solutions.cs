@@ -80,10 +80,32 @@ namespace Aoc23
 
         #endregion DAY 2
 
+        #region DAY 3
+
+        public decimal Day3Solve()
+        {
+            var data = File.ReadAllLines(Input);
+
+            var gear = new GearRatios(data);
+
+            return gear.GetPartNumbers().Sum();
+        }
+
+        public decimal Day3Solve2()
+        {
+            var data = File.ReadAllLines(Input);
+
+            var gear = new GearRatios(data);
+
+            return gear.GetGearRatios().Sum();
+        }
+
+        #endregion DAY 3
+
         public Solutions(bool isTest = false)
         {
             Input = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), isTest ? "input-test.txt" : "input.txt");
-            Solution = Day2Solve().ToString();
+            Solution = Day3Solve2().ToString();
         }
     }
 }

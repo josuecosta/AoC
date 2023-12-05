@@ -49,10 +49,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BL\BeaconExclusionZone.cs" />
-    <Compile Include="BL\RegolithReservoir.cs" />
-    <Compile Include="BL\DistressSignal.cs" />
-    <Compile Include="BL\HillClimbingAlgorithm.cs" />
+    <Compile Include="BL\GearRatios.cs" />
+    <Compile Include="old\BeaconExclusionZone.cs" />
+    <Compile Include="old\RegolithReservoir.cs" />
+    <Compile Include="old\DistressSignal.cs" />
+    <Compile Include="old\HillClimbingAlgorithm.cs" />
     <Compile Include="BL\CubeConundrumGame.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="Program.cs" />
