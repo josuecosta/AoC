@@ -53,6 +53,7 @@
     <Compile Include="BL\RegolithReservoir.cs" />
     <Compile Include="BL\DistressSignal.cs" />
     <Compile Include="BL\HillClimbingAlgorithm.cs" />
+    <Compile Include="BL\CubeConundrumGame.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

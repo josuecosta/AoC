@@ -63,28 +63,19 @@ namespace Aoc23
         public decimal Day2Solve()
         {
             var data = File.ReadAllLines(Input);
-            decimal sum = 0;
 
-            for (int i = 0; i < data.Length; i++)
-            {
+            var cube = new CubeConundrumGame(data);
 
-            }
-
-            return sum;
+            return cube.Games.Where(g => g.IsPossible).Sum(g => g.ID);
         }
 
         public decimal Day2Solve2()
         {
             var data = File.ReadAllLines(Input);
-   
-            decimal sum = 0;
 
-            for (int i = 0; i < data.Length; i++)
-            {
+            var cube = new CubeConundrumGame(data);
 
-            }
-
-            return sum;
+            return cube.Games.Sum(g => g.PowerOfSetCubes);
         }
 
         #endregion DAY 2
