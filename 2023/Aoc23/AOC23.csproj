@@ -58,6 +58,7 @@
     <Compile Include="Helpers.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scratchcards.cs" />
     <Compile Include="Solutions.cs" />
   </ItemGroup>
   <ItemGroup>

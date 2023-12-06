@@ -1,4 +1,5 @@
 ﻿using Aoc23.BL;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -102,10 +103,32 @@ namespace Aoc23
 
         #endregion DAY 3
 
+        #region DAY 4
+
+        public decimal Day4Solve()
+        {
+            var data = File.ReadAllLines(Input);
+
+            var cards = new Scratchcards(data);
+
+            return (decimal)cards.GetPoints();
+        }
+
+        public decimal Day4Solve2()
+        {
+            var data = File.ReadAllLines(Input);
+
+            var cards = new Scratchcards(data);
+
+            return cards.GetTotalScratchcards();
+        }
+
+        #endregion DAY 4
+
         public Solutions(bool isTest = false)
         {
             Input = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), isTest ? "input-test.txt" : "input.txt");
-            Solution = Day3Solve2().ToString();
+            Solution = Day4Solve2().ToString();
         }
     }
 }
