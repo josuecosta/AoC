@@ -125,10 +125,32 @@ namespace Aoc23
 
         #endregion DAY 4
 
+        #region DAY 5
+
+        public decimal Day5Solve()
+        {
+            var data = File.ReadAllLines(Input);
+
+            var seeds = new SeedAFertilizer(data);
+
+            return seeds.GetLowestLocation();
+        }
+
+        public decimal Day5Solve2()
+        {
+            var data = File.ReadAllLines(Input);
+
+            var seeds = new SeedAFertilizer(data);
+
+            return seeds.GetLowestLocationByRange();
+        }
+
+        #endregion DAY 5
+
         public Solutions(bool isTest = false)
         {
             Input = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), isTest ? "input-test.txt" : "input.txt");
-            Solution = Day4Solve2().ToString();
+            Solution = Day5Solve2().ToString();
         }
     }
 }
