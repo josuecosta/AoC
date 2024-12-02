@@ -24,9 +24,8 @@ internal class ReportsRedNosed
 
     public bool IsValidReport(int[] report, bool includeDampener = false)
     {
-        return !includeDampener
-            ? AreAllIncreasingOrDecreasing(report) && HaveCorrectAdjacentLevels(report)
-            : CheckWithDampenerVersion(report);
+        return AreAllIncreasingOrDecreasing(report) && HaveCorrectAdjacentLevels(report)
+            || (includeDampener && CheckWithDampenerVersion(report));
     }
 
     private bool CheckWithDampenerVersion(int[] report)
