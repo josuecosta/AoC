@@ -75,14 +75,36 @@ public class Solutions
 
         var reports = new ReportsRedNosed(data);
 
-        return reports.Reports.Count(g => reports.IsValidReport(g, true)); // < 586
+        return reports.Reports.Count(g => reports.IsValidReport(g, true));
     }
 
     #endregion DAY 2
 
+    #region DAY 3
+
+    public decimal Day3Solve()
+    {
+        var data = File.ReadAllLines(Input);
+
+        var mull = new MullItOver(data);
+
+        return mull.GetSum;
+    }
+
+    public decimal Day3Solve2()
+    {
+        var data = File.ReadAllLines(Input);
+
+        var mull = new MullItOver(data);
+
+        return mull.GetSumEnableDisable;
+    }
+
+    #endregion DAY 3
+
     public Solutions(bool isTest = false)
     {
         Input = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)!, isTest ? "input-test.txt" : "input.txt");
-        Solution = Day2Solve2().ToString();
+        Solution = Day3Solve2().ToString();
     }
 }

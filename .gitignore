@@ -289,3 +289,7 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+/2024/AOC24Tests/input.txt
+/2024/AOC24Tests/input-test.txt
+/2024/AOC24Tests/input.txt
+/2024/AOC24Tests/input-test.txt
