@@ -46,24 +46,25 @@ public class Coordinates
     {
         X = 0;
         Y = 0;
+        Occurrences = 0;
     }
 
     public Coordinates(int x, int y)
     {
         X = x;
         Y = y;
+        Occurrences = 0;
     }
 
-    public Coordinates(int x, int y, bool isMarked)
+    public Coordinates(int x, int y, bool isMarked) : this(x, y)
     {
-        X = x;
-        Y = y;
         IsMarked = isMarked;
     }
 
     public int X { get; set; }
     public int Y { get; set; }
     public bool IsMarked { get; set; }
+    public decimal Occurrences { get; set; }
 
     public override bool Equals(object? obj)
     {
