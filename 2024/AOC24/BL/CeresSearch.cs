@@ -122,7 +122,7 @@ internal class CeresSearch(string[] data)
                 letters.Add(letter);
             }
 
-            if (!(letters.Count(l => l == "M") == 1 
+            if (!(letters.Count(l => l == "M") == 1
                && letters.Count(l => l == "S") == 1))
             {
                 return false;

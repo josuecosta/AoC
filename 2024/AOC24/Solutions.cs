@@ -128,9 +128,31 @@ public class Solutions
 
     #endregion DAY 4
 
+    #region DAY 5
+
+    public decimal Day5Solve()
+    {
+        var data = File.ReadAllLines(Input);
+
+        var day = new Day5(data);
+
+        return day.SumMiddleNumbers;
+    }
+
+    public decimal Day5Solve2()
+    {
+        var data = File.ReadAllLines(Input);
+
+        var day = new Day5(data);
+
+        return day.SumMiddleNumbersOfIncorrectOrder;
+    }
+
+    #endregion DAY 5
+
     public Solutions(bool isTest = false)
     {
         Input = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)!, isTest ? "input-test.txt" : "input.txt");
-        Solution = Day4Solve2().ToString();
+        Solution = Day5Solve2().ToString();
     }
 }
