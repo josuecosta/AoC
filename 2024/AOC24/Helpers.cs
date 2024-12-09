@@ -38,6 +38,14 @@ public class Helpers
 
     public static decimal CalcManhattanDistance(int x1, int y1, int x2, int y2)
         => CalcManhattanDistance(new Coordinates(x1, y1), new Coordinates(x2, y2));
+
+    public static readonly Dictionary<Directions, (int RowDelta, int ColDelta, Directions NextDirection)> DirectionLookup = new()
+    {
+        { Directions.Right, (0, 1, Directions.Down) },
+        { Directions.Left, (0, -1, Directions.Up) },
+        { Directions.Up, (-1, 0, Directions.Right) },
+        { Directions.Down, (1, 0, Directions.Left) }
+    };
 }
 
 public class Coordinates
@@ -82,4 +90,17 @@ public class Coordinates
     {
         return (X, Y).GetHashCode();
     }
+}
+
+public enum Directions
+{
+    Right,
+    Left,
+    Up,
+    Down,
+
+    Diagonal1,
+    Diagonal2,
+    Diagonal3,
+    Diagonal4
 }

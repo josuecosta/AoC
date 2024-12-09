@@ -150,9 +150,35 @@ public class Solutions
 
     #endregion DAY 5
 
+    #region DAY 6
+
+    public decimal Day6Solve()
+    {
+        var data = File.ReadAllLines(Input);
+
+        var day = new Day6(data);
+
+        day.DoPatroll();
+
+        return day.VisitedPositions.Count;
+    }
+
+    public decimal Day6Solve2()
+    {
+        var data = File.ReadAllLines(Input);
+
+        var day = new Day6(data);
+
+        day.DoPatrollWithLoops();
+
+        return day.SuccessObstructions; // < 2033
+    }
+
+    #endregion DAY 6
+
     public Solutions(bool isTest = false)
     {
         Input = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)!, isTest ? "input-test.txt" : "input.txt");
-        Solution = Day5Solve2().ToString();
+        Solution = Day6Solve2().ToString();
     }
 }

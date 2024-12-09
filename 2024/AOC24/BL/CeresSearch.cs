@@ -130,16 +130,4 @@ internal class CeresSearch(string[] data)
         }
         return true;
     }
-
-    private enum Directions
-    {
-        Right,
-        Left,
-        Up,
-        Down,
-        Diagonal1,
-        Diagonal2,
-        Diagonal3,
-        Diagonal4
-    }
 }
