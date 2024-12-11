@@ -6,6 +6,7 @@ public class Helpers
 {
     public static Regex RegexPairInsideBrackets = new Regex("\\[[0-9,\\[\\]]*\\]");
     public static Regex RegexNumbers = new Regex("[0-9]+");
+    public static Regex RegexAlphaNumericChars = new Regex("[0-9a-zA-Z]");
 
     public int FixMapCircularReference(string[] data, int x, int y)
     {
@@ -30,7 +31,7 @@ public class Helpers
     {
         var requiredKeys = new string[] { "byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid" };
 
-        return requiredKeys.All(x => passport.ContainsKey(x));
+        return requiredKeys.All(passport.ContainsKey);
     }
 
     public static decimal CalcManhattanDistance(Coordinates c1, Coordinates c2)

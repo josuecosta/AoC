@@ -193,14 +193,36 @@ public class Solutions
 
         var day = new Day7(data);
 
-        return day.NumbersWrap.Where(n => n.IsCalibrated(true)).Sum(n => n.TestValue); // 44841372855953 == 45071967642319
+        return day.NumbersWrap.Where(n => n.IsCalibrated(true)).Sum(n => n.TestValue);
     }
 
     #endregion DAY 7
 
+    #region DAY 8
+
+    public decimal Day8Solve()
+    {
+        var data = File.ReadAllLines(Input);
+
+        var day = new Day8(data);
+
+        return day.GetAntiNodes();
+    }
+
+    public decimal Day8Solve2()
+    {
+        var data = File.ReadAllLines(Input);
+
+        var day = new Day8(data);
+
+        return day.GetAntiNodesWithUpdatedModel();
+    }
+
+    #endregion DAY 8
+
     public Solutions(bool isTest = false)
     {
         Input = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)!, isTest ? "input-test.txt" : "input.txt");
-        Solution = Day7Solve2().ToString();
+        Solution = Day8Solve2().ToString();
     }
 }
