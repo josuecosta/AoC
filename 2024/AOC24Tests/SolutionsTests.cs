@@ -9,7 +9,7 @@ public class SolutionsTests(ITestOutputHelper testOutputHelper)
     public void Day_Test()
     {
         var result = new Solutions(true);
-        result.Solution.Should().Be("6");
+        result.Solution.Should().Be("11387");
     }
 
     [Fact]

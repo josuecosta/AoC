@@ -171,14 +171,36 @@ public class Solutions
 
         day.DoPatrollWithLoops();
 
-        return day.SuccessObstructions; // < 2033
+        return day.SuccessObstructions;
     }
 
     #endregion DAY 6
 
+    #region DAY 7
+
+    public decimal Day7Solve()
+    {
+        var data = File.ReadAllLines(Input);
+
+        var day = new Day7(data);
+
+        return day.NumbersWrap.Where(n => n.IsCalibrated()).Sum(n => n.TestValue);
+    }
+
+    public decimal Day7Solve2()
+    {
+        var data = File.ReadAllLines(Input);
+
+        var day = new Day7(data);
+
+        return day.NumbersWrap.Where(n => n.IsCalibrated(true)).Sum(n => n.TestValue); // 44841372855953 == 45071967642319
+    }
+
+    #endregion DAY 7
+
     public Solutions(bool isTest = false)
     {
         Input = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)!, isTest ? "input-test.txt" : "input.txt");
-        Solution = Day6Solve2().ToString();
+        Solution = Day7Solve2().ToString();
     }
 }
